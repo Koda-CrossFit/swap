@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Born Primitive Swap · Koda Iron Games</title>
+<meta name="description" content="Got the wrong size or style in your Born Primitive kit? Tell us what you have and what you want, and we'll match you with someone who wants to trade.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0b0c0e; --panel:#15171a; --panel2:#1c1f23; --line:#26292e;
+    --red:#c13b4a; --red-hi:#d64556;
+    --txt:#f5f6f7; --muted:#a8aeb5; --muted2:#7d838b; --ok:#7ec97e;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--txt);font-family:'Poppins',system-ui,sans-serif;line-height:1.5}
+  img{max-width:100%;display:block}
+  .wrap{max-width:760px;margin:0 auto;padding:0 16px}
+  .display{font-family:'Anton',Impact,sans-serif;font-weight:400;text-transform:uppercase;letter-spacing:.02em}
+
+  /* header */
+  .site-head{border-bottom:1px solid var(--line);background:#0b0c0e}
+  .site-head .wrap{display:flex;align-items:center;gap:14px;height:62px}
+  .site-head img{height:44px;width:auto;mix-blend-mode:screen}
+  .site-head span{font-size:.7rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+
+  /* intro */
+  .intro{padding:36px 0 22px}
+  .kicker{font-size:.72rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--red-hi);margin-bottom:10px}
+  .intro h1{font-size:clamp(2.1rem,7vw,3.4rem);line-height:1.02}
+  .intro h1 em{font-style:normal;color:var(--red)}
+  .intro p{margin-top:14px;color:#d3d7db;font-size:1.02rem;max-width:600px}
+  .steps{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
+  .steps div{background:var(--panel);border:1px solid var(--line);border-radius:99px;padding:7px 14px;
+    font-size:.78rem;font-weight:600;color:var(--muted)}
+  .steps b{color:var(--red-hi);margin-right:4px}
+
+  /* sections */
+  .sec{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:22px 20px;margin-bottom:14px}
+  .sec-head{display:flex;align-items:baseline;gap:12px;margin-bottom:4px}
+  .sec-head .n{font-family:'Anton',sans-serif;font-size:1.35rem;color:var(--red);line-height:1}
+  .sec-head h2{font-family:'Anton',sans-serif;font-weight:400;letter-spacing:.03em;text-transform:uppercase;font-size:1.35rem}
+  .ssub{font-size:.86rem;color:var(--muted);margin:2px 0 16px}
+
+  .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .field{display:flex;flex-direction:column;gap:5px}
+  .field.full{grid-column:1/-1}
+  .field label{font-size:.7rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+  .field input,.field textarea{background:var(--panel2);border:1px solid var(--line);border-radius:8px;
+    color:var(--txt);font-family:inherit;font-size:1rem;padding:12px}
+  .field textarea{min-height:76px;resize:vertical}
+  .field input:focus,.field textarea:focus{outline:none;border-color:var(--red)}
+  .field.bad input{border-color:var(--red-hi)}
+
+  /* item toggles */
+  .toggles{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .toggle{display:flex;align-items:center;gap:12px;background:var(--panel2);border:2px solid var(--line);
+    border-radius:12px;padding:10px 12px;cursor:pointer;color:var(--txt);font-family:inherit;text-align:left;transition:.12s}
+  .toggle:hover{border-color:#3d434b}
+  .toggle img{width:52px;height:52px;object-fit:cover;object-position:center 62%;border-radius:8px;background:#ececec;flex:none}
+  .toggle .tname{font-family:'Anton',sans-serif;text-transform:uppercase;font-size:1.1rem;letter-spacing:.03em;line-height:1.1}
+  .toggle .tsub{font-size:.74rem;color:var(--muted)}
+  .toggle .cbox{margin-left:auto;flex:none;width:22px;height:22px;border:2px solid #4a4f56;border-radius:6px;
+    display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700;color:transparent}
+  .toggle[aria-pressed="true"]{border-color:var(--red);background:linear-gradient(160deg,rgba(193,59,74,.14),var(--panel2) 70%)}
+  .toggle[aria-pressed="true"] .cbox{background:var(--red);border-color:var(--red);color:#fff}
+
+  /* swap blocks */
+  .swap{display:none}
+  .swap.show{display:block}
+  .side{margin-top:16px}
+  .side:first-of-type{margin-top:4px}
+  .side-label{font-family:'Anton',sans-serif;text-transform:uppercase;font-size:1.05rem;letter-spacing:.04em;margin-bottom:8px}
+  .side-label small{font-family:'Poppins',sans-serif;text-transform:none;letter-spacing:0;font-size:.76rem;color:var(--muted);margin-left:6px}
+  .arrow{display:flex;align-items:center;gap:10px;margin:18px 0 0;color:var(--red-hi);font-size:.72rem;font-weight:700;
+    letter-spacing:.16em;text-transform:uppercase}
+  .arrow::before,.arrow::after{content:"";flex:1;height:1px;background:var(--line)}
+
+  .styles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+  .style{background:var(--panel2);border:2px solid var(--line);border-radius:11px;padding:5px 5px 8px;cursor:pointer;
+    color:var(--txt);font-family:inherit;text-align:center;transition:.12s}
+  .style:hover{border-color:#3d434b}
+  .style img{width:100%;aspect-ratio:1;object-fit:cover;object-position:center 64%;border-radius:7px;background:#ececec}
+  .style .sname{font-size:.76rem;font-weight:600;line-height:1.2;margin-top:6px}
+  .style .scolor{font-size:.68rem;color:var(--muted)}
+  .style[aria-pressed="true"]{border-color:var(--red);background:linear-gradient(160deg,rgba(193,59,74,.16),var(--panel2) 70%)}
+  .any{margin-top:8px;width:100%;background:var(--panel2);border:2px dashed #3a3f46;border-radius:10px;padding:10px;
+    color:var(--muted);font-family:inherit;font-weight:600;font-size:.85rem;cursor:pointer;transition:.12s}
+  .any:hover{color:var(--txt)}
+  .any[aria-pressed="true"]{border-style:solid;border-color:var(--red);color:#fff;background:rgba(193,59,74,.18)}
+
+  .sizes{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+  .size{flex:1 0 52px;max-width:72px;border:1px solid var(--line);background:var(--panel2);color:var(--muted);border-radius:9px;
+    padding:10px 0;font-family:inherit;font-weight:700;font-size:.95rem;cursor:pointer;transition:.12s}
+  .size:hover{border-color:#3d434b;color:var(--txt)}
+  .size[aria-pressed="true"]{background:var(--red);border-color:var(--red);color:#fff}
+  .hint{font-size:.76rem;color:var(--muted2);margin-top:8px}
+
+  /* submit */
+  .submit{width:100%;border:none;cursor:pointer;background:var(--red);color:#fff;font-family:inherit;font-weight:700;
+    font-size:1.05rem;letter-spacing:.02em;border-radius:10px;padding:17px;margin-top:6px;transition:.15s}
+  .submit:hover{background:var(--red-hi)}
+  .submit:disabled{opacity:.6;cursor:default}
+  .error-msg{color:var(--red-hi);font-size:.9rem;font-weight:600;text-align:center;margin-top:12px;min-height:1.2em}
+  .fine{font-size:.74rem;color:var(--muted2);text-align:center;margin-top:8px}
+
+  /* success */
+  #done{display:none;background:var(--panel);border:1px solid #2e4a2e;border-radius:16px;padding:26px 22px;margin-bottom:14px}
+  #done h2{color:var(--ok);font-size:1.7rem;line-height:1.1;margin-bottom:8px}
+  #done p{color:#d3d7db;font-size:.95rem;margin-bottom:12px}
+  #matchNote{display:none;background:rgba(126,201,126,.1);border:1px solid #2e4a2e;border-radius:10px;padding:12px 14px;
+    color:var(--ok) !important;font-weight:600}
+  #summary{border-top:1px solid var(--line);padding-top:10px;margin:6px 0 18px;font-size:.88rem}
+  #summary div{display:flex;justify-content:space-between;gap:14px;padding:4px 0;color:var(--muted)}
+  #summary span:first-child{white-space:nowrap}
+  #summary span:last-child{color:var(--txt);font-weight:600;text-align:right}
+  .again{width:100%;background:transparent;border:1px solid #3d434b;color:var(--txt);border-radius:10px;padding:14px;
+    font-family:inherit;font-weight:600;font-size:.95rem;cursor:pointer}
+  .again:hover{border-color:var(--muted)}
+
+  footer{border-top:1px solid var(--line);margin-top:40px;padding:24px 0 40px;font-size:.78rem;color:var(--muted2)}
+  footer a{color:var(--muted)}
+
+  @media(max-width:560px){
+    .form-grid{grid-template-columns:1fr}
+    .toggles{grid-template-columns:1fr}
+    .sec{padding:18px 14px}
+    .style .sname{font-size:.7rem}
+  }
+</style>
+</head>
+<body>
+
+<header class="site-head">
+  <div class="wrap">
+    <img src="assets/logo-sm.jpg" alt="Koda Iron Games">
+    <span>Athlete Check-In</span>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="intro">
+    <div class="kicker">Born Primitive Kit · Size &amp; Style Swap</div>
+    <h1 class="display">Need a different <em>size</em> or <em>style</em>?</h1>
+    <p>Tell us what you got and what you'd rather have. We'll pair you with someone who wants to trade
+      and reach out by text or email to set up the swap.</p>
+    <div class="steps">
+      <div><b>1</b>Your info</div>
+      <div><b>2</b>What you got</div>
+      <div><b>3</b>What you want</div>
+    </div>
+  </section>
+
+  <div id="done" aria-live="polite">
+    <h2 class="display">You're on the swap list</h2>
+    <p id="matchNote">Good news: someone on the list already has what you want and wants what you have.
+      We'll connect you two shortly.</p>
+    <p id="waitNote">We'll text or email you as soon as we find someone to trade with.
+      Hang on to your kit (tags and all) until then.</p>
+    <div id="summary"></div>
+    <button type="button" class="again" id="againBtn">Submit another request</button>
+  </div>
+
+  <form id="swapForm" novalidate>
+    <div class="sec">
+      <div class="sec-head"><span class="n">01</span><h2>Your Info</h2></div>
+      <p class="ssub">So we can reach you when we find a match.</p>
+      <div class="form-grid">
+        <div class="field full"><label for="fName">Full name *</label><input id="fName" type="text" autocomplete="name"></div>
+        <div class="field"><label for="fEmail">Email *</label><input id="fEmail" type="email" autocomplete="email" inputmode="email"></div>
+        <div class="field"><label for="fPhone">Phone number *</label><input id="fPhone" type="tel" autocomplete="tel" inputmode="tel"></div>
+        <div class="field full"><label for="fTeam">Team name</label><input id="fTeam" type="text" placeholder="Optional"></div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-head"><span class="n">02</span><h2>What do you want to switch?</h2></div>
+      <p class="ssub">Pick one or both.</p>
+      <div class="toggles">
+        <button type="button" class="toggle" data-item="bra" aria-pressed="false">
+          <img src="assets/kits/bp-bra-helix.jpg" alt="">
+          <div><div class="tname">Sports Bra</div><div class="tsub">Vitality · Helix · Serenity</div></div>
+          <span class="cbox">✓</span>
+        </button>
+        <button type="button" class="toggle" data-item="short" aria-pressed="false">
+          <img src="assets/kits/bp-short-synergy.jpg" alt="">
+          <div><div class="tname">Shorts</div><div class="tsub">New Heights · Endurance · Synergy</div></div>
+          <span class="cbox">✓</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="sec swap" id="swap-bra"></div>
+    <div class="sec swap" id="swap-short"></div>
+
+    <div class="sec">
+      <div class="field full"><label for="fNotes">Anything else?</label>
+        <textarea id="fNotes" placeholder="Optional, e.g. &quot;Any medium works&quot; or &quot;I'm at the check-in table until 9&quot;"></textarea></div>
+    </div>
+
+    <button type="submit" class="submit" id="submitBtn">Request a swap</button>
+    <div class="error-msg" id="err" role="alert"></div>
+    <p class="fine">Swaps depend on someone wanting to trade with you, so we can't guarantee one.</p>
+  </form>
+</main>
+
+<footer>
+  <div class="wrap">Koda Iron Games 2026 · Presented by WODprep · Questions? Stop by the check-in table or email
+    <a href="mailto:kodaironview@gmail.com">kodaironview@gmail.com</a></div>
+</footer>
+
+<script>
+var API = 'https://script.google.com/macros/s/AKfycbyk14st_Ix70GM0T2I8aKRU9HRBlotk_Up-Ikh5MHxYuUdDj4xIvj36r8lvQh15gPvm/exec';
+var ANY = 'Any style';
+var SIZES = ['XS', 'S', 'M', 'L', 'XL'];
+// Names must match BP_SWAP_STYLES in the backend (Code.js).
+var ITEMS = {
+  bra: { item: 'Sports Bra', num: '03', styles: [
+    { name: 'Vitality Sports Bra 3.0', color: 'Black', img: 'assets/kits/bp-bra-vitality.jpg' },
+    { name: 'Helix Sports Bra', color: 'Navy', img: 'assets/kits/bp-bra-helix.jpg' },
+    { name: 'Serenity Sports Bra', color: 'Black', img: 'assets/kits/bp-bra-serenity.jpg' } ] },
+  short: { item: 'Shorts', num: '04', styles: [
+    { name: 'New Heights Short', color: 'Navy', img: 'assets/kits/bp-short-newheights.jpg' },
+    { name: 'Endurance Short', color: 'Navy', img: 'assets/kits/bp-short-endurance.jpg' },
+    { name: 'Synergy Short 2.0', color: 'Black', img: 'assets/kits/bp-short-synergy.jpg' } ] }
+};
+function full(s) { return s.name + ' (' + s.color + ')'; }
+
+var state;
+function blank() {
+  return { on: { bra: false, short: false },
+    bra: { hasStyle: '', hasSize: '', wantStyle: '', wantSize: '' },
+    short: { hasStyle: '', hasSize: '', wantStyle: '', wantSize: '' } };
+}
+
+function styleButtons(key, side) {
+  var cur = state[key][side + 'Style'];
+  return ITEMS[key].styles.map(function (s) {
+    var v = full(s);
+    return '<button type="button" class="style" data-key="' + key + '" data-side="' + side + '" data-style="' + v + '" aria-pressed="' + (cur === v) + '">' +
+      '<img src="' + s.img + '" alt="">' +
+      '<div class="sname">' + s.name + '</div><div class="scolor">' + s.color + '</div></button>';
+  }).join('');
+}
+function sizeButtons(key, side) {
+  var cur = state[key][side + 'Size'];
+  return SIZES.map(function (z) {
+    return '<button type="button" class="size" data-key="' + key + '" data-side="' + side + '" data-size="' + z + '" aria-pressed="' + (cur === z) + '">' + z + '</button>';
+  }).join('');
+}
+function renderSwap(key) {
+  var box = document.getElementById('swap-' + key);
+  var it = ITEMS[key], st = state[key];
+  box.classList.toggle('show', state.on[key]);
+  if (!state.on[key]) { box.innerHTML = ''; return; }
+  var lower = it.item.toLowerCase();
+  box.innerHTML =
+    '<div class="sec-head"><span class="n">' + it.num + '</span><h2>' + it.item + ' Swap</h2></div>' +
+    '<div class="side"><div class="side-label">What you got <small>the ' + lower + ' in your kit</small></div>' +
+      '<div class="styles">' + styleButtons(key, 'has') + '</div>' +
+      '<div class="sizes">' + sizeButtons(key, 'has') + '</div></div>' +
+    '<div class="arrow">Trade for</div>' +
+    '<div class="side"><div class="side-label">What you want</div>' +
+      '<div class="styles">' + styleButtons(key, 'want') + '</div>' +
+      '<button type="button" class="any" data-key="' + key + '" aria-pressed="' + (st.wantStyle === ANY) + '">Open to any style</button>' +
+      '<div class="sizes">' + sizeButtons(key, 'want') + '</div>' +
+      '<p class="hint">Just need a different size? Keep the same style and pick the new size.</p></div>';
+}
+function renderAll() {
+  document.querySelectorAll('.toggle').forEach(function (b) { b.setAttribute('aria-pressed', state.on[b.dataset.item]); });
+  renderSwap('bra'); renderSwap('short');
+}
+
+document.addEventListener('click', function (e) {
+  var t = e.target.closest('button');
+  if (!t || !t.closest('#swapForm')) return;
+  var key = t.dataset.key;
+  if (t.classList.contains('toggle')) {
+    state.on[t.dataset.item] = !state.on[t.dataset.item];
+    renderSwap(t.dataset.item);
+    document.querySelector('.toggle[data-item="' + t.dataset.item + '"]').setAttribute('aria-pressed', state.on[t.dataset.item]);
+    clearErr();
+    return;
+  }
+  if (t.classList.contains('style')) {
+    var side = t.dataset.side;
+    state[key][side + 'Style'] = t.dataset.style;
+    // Most swaps are size-only: default "want" to the same style.
+    if (side === 'has' && !state[key].wantStyle) state[key].wantStyle = t.dataset.style;
+  } else if (t.classList.contains('any')) {
+    state[key].wantStyle = state[key].wantStyle === ANY ? '' : ANY;
+  } else if (t.classList.contains('size')) {
+    state[key][t.dataset.side + 'Size'] = t.dataset.size;
+  } else return;
+  syncSwap(key);
+  clearErr();
+});
+
+// Update highlights in place (re-rendering would reload the photos).
+function syncSwap(key) {
+  var box = document.getElementById('swap-' + key), st = state[key];
+  box.querySelectorAll('.style').forEach(function (b) { b.setAttribute('aria-pressed', st[b.dataset.side + 'Style'] === b.dataset.style); });
+  box.querySelectorAll('.size').forEach(function (b) { b.setAttribute('aria-pressed', st[b.dataset.side + 'Size'] === b.dataset.size); });
+  box.querySelector('.any').setAttribute('aria-pressed', st.wantStyle === ANY);
+}
+
+function clearErr() { document.getElementById('err').textContent = ''; }
+function fail(msg, el) {
+  document.getElementById('err').textContent = msg;
+  if (el) { el.scrollIntoView({ behavior: 'smooth', block: 'center' }); if (el.focus) el.focus({ preventScroll: true }); }
+}
+
+document.getElementById('swapForm').addEventListener('submit', function (e) {
+  e.preventDefault();
+  var name = fName.value.trim(), email = fEmail.value.trim(), phone = fPhone.value.trim();
+  if (!name) return fail('Please enter your name.', fName);
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return fail('Please enter a valid email.', fEmail);
+  if (phone.replace(/\D/g, '').length < 10) return fail('Please enter a phone number we can text.', fPhone);
+  var keys = ['bra', 'short'].filter(function (k) { return state.on[k]; });
+  if (!keys.length) return fail('Pick what you want to switch: sports bra, shorts, or both.', document.querySelector('.toggles'));
+  var items = [];
+  for (var i = 0; i < keys.length; i++) {
+    var k = keys[i], st = state[k], it = ITEMS[k], box = document.getElementById('swap-' + k);
+    var what = it.item.toLowerCase();
+    if (!st.hasStyle || !st.hasSize) return fail('Pick the style and size of the ' + what + ' you got.', box);
+    if (!st.wantStyle || !st.wantSize) return fail('Pick the style and size of the ' + what + ' you want.', box);
+    if (st.wantStyle === st.hasStyle && st.wantSize === st.hasSize) return fail('Your ' + what + ' "want" is the same as what you got. Change the style or size.', box);
+    items.push({ item: it.item, hasStyle: st.hasStyle, hasSize: st.hasSize, wantStyle: st.wantStyle, wantSize: st.wantSize });
+  }
+
+  var payload = { action: 'bpSwapRequest', name: name, email: email, phone: phone,
+    team: fTeam.value.trim(), notes: fNotes.value.trim(), items: items, page: location.href };
+  var btn = document.getElementById('submitBtn');
+  btn.disabled = true; btn.textContent = 'Sending…'; clearErr();
+
+  function done(matched) {
+    var sum = document.getElementById('summary'); sum.innerHTML = '';
+    function row(l, v) { var d = document.createElement('div'), a = document.createElement('span'), b = document.createElement('span');
+      a.textContent = l; b.textContent = v; d.appendChild(a); d.appendChild(b); sum.appendChild(d); }
+    row('Name', name);
+    items.forEach(function (x) {
+      row(x.item, x.hasStyle.replace(/ \(.*\)$/, '') + ' ' + x.hasSize + '  →  ' + (x.wantStyle === ANY ? 'Any style' : x.wantStyle.replace(/ \(.*\)$/, '')) + ' ' + x.wantSize);
+    });
+    document.getElementById('matchNote').style.display = matched ? 'block' : 'none';
+    document.getElementById('waitNote').style.display = matched ? 'none' : 'block';
+    document.getElementById('swapForm').style.display = 'none';
+    document.querySelector('.intro').style.display = 'none';
+    document.getElementById('done').style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  function failSend(msg) {
+    btn.disabled = false; btn.textContent = 'Request a swap';
+    fail(msg || 'Something went wrong. Please try again, or let the check-in table know.', null);
+  }
+  fetch(API, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(payload) })
+    .then(function (r) { return r.json(); })
+    .then(function (j) {
+      if (j && j.status === 'ok') done(j.matched > 0);
+      else failSend(j && j.error ? j.error : null);
+    })
+    .catch(function () {
+      // Response unreadable (CORS-opaque). The POST almost certainly landed;
+      // don't resend. Reachable backend → treat as delivered.
+      fetch(API, { method: 'GET', mode: 'no-cors' }).then(function () { done(false); }).catch(function () { failSend(); });
+    });
+});
+
+document.getElementById('againBtn').addEventListener('click', function () {
+  state = blank();
+  document.getElementById('swapForm').reset();
+  renderAll();
+  var btn = document.getElementById('submitBtn'); btn.disabled = false; btn.textContent = 'Request a swap';
+  document.getElementById('done').style.display = 'none';
+  document.querySelector('.intro').style.display = '';
+  document.getElementById('swapForm').style.display = '';
+  window.scrollTo({ top: 0 });
+  fName.focus();
+});
+
+state = blank();
+renderAll();
+</script>
+</body>
+</html>
